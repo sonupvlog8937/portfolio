@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from "framer-motion";
-import Background from "./Background";
+import { motion } from "framer-motion";
+import type { ReactNode } from "react";
 import CustomCursor from "./CustomCursor";
 import ScrollProgress from "./ScrollProgress";
 import Navbar from "./Navbar";
@@ -13,100 +13,42 @@ import Education from "./Education";
 import Contact from "./Contact";
 import Footer from "./Footer";
 
-const pageTransition = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 },
-  transition: { duration: 0.5, ease: [0.43, 0.13, 0.23, 0.96] }
-};
-
-const sectionVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.43, 0.13, 0.23, 0.96]
-    }
-  }
-};
+// Every section after About sits in the same dark rounded card.
+function Card({ children }: { children: ReactNode }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      className="px-3 sm:px-4"
+    >
+      <div className="mx-auto max-w-[1440px] overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#121211]">
+        {children}
+      </div>
+    </motion.div>
+  );
+}
 
 export default function Portfolio() {
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        className="relative min-h-screen bg-gradient-to-br from-gray-900 via-gray-950 to-black font-body text-white antialiased overflow-x-hidden"
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        {...pageTransition}
-      >
-        <Background />
-        <CustomCursor />
-        <ScrollProgress />
-        <Navbar />
-        <main>
-          <Hero />
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <About />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Skills />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <FeaturedProject />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Projects />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Journey />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Education />
-          </motion.div>
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={sectionVariants}
-          >
-            <Contact />
-          </motion.div>
-        </main>
-        <Footer />
-      </motion.div>
-    </AnimatePresence>
+    <div className="relative min-h-screen overflow-x-clip bg-black font-body text-cream antialiased">
+      <CustomCursor />
+      <ScrollProgress />
+      <Navbar />
+      <main>
+        <Hero />
+        <About />
+        <div className="mt-6 flex flex-col gap-6 pb-6">
+          <Card><Skills /></Card>
+          <Card><FeaturedProject /></Card>
+          <Card><Projects /></Card>
+          <Card><Journey /></Card>
+          <Card><Education /></Card>
+          <Card><Contact /></Card>
+        </div>
+      </main>
+      <Footer />
+    </div>
   );
 }

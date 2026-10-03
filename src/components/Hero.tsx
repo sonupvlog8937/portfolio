@@ -1,158 +1,98 @@
-import { motion, useReducedMotion } from "framer-motion";
-import { ArrowDown, Download, Sparkles, Flame } from "lucide-react";
-import HeroScene from "./3d/HeroScene";
-import SceneBoundary from "./3d/SceneBoundary";
-import MagneticButton from "./ui/MagneticButton";
-import { profile } from "../data/resume";
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 import { downloadResume } from "../lib/resumePdf";
-import { fadeUp, staggerContainer } from "../animations/variants";
+
+/**
+ * Put your own photo at /public/hero.jpg (wide landscape works best).
+ * If the file is missing, the CSS dusk scene below is shown instead.
+ */
+const HERO_IMAGE = "/hero.jpg";
+
+const ease = [0.22, 1, 0.36, 1] as const;
 
 export default function Hero() {
-  const reduced = !!useReducedMotion();
-  const words = ["Building", "Modern"];
+  const [imageOk, setImageOk] = useState(true);
 
   return (
-    <section id="home" className="relative flex min-h-screen items-center overflow-hidden">
-      {/* Animated background gradients */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-yellow-500/5" />
-      <motion.div 
-        className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-orange-600/10 via-transparent to-red-600/10"
-        animate={{
-          opacity: [0.3, 0.6, 0.3],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
-      
-      <div className="pointer-events-none absolute inset-0 md:left-1/4">
-        <SceneBoundary>
-          <HeroScene reduced={reduced} />
-        </SceneBoundary>
-      </div>
-      
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/50 to-transparent" />
-      
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 pb-28 pt-36 sm:px-8 lg:px-10">
-        <motion.div variants={staggerContainer} initial="hidden" animate="visible">
-          <motion.div
-            variants={fadeUp}
-            className="group mb-6 inline-flex items-center gap-2 rounded-full border border-orange-400/30 bg-gradient-to-r from-orange-500/20 via-orange-400/15 to-yellow-500/20 px-4 py-1.5 text-xs font-medium text-orange-300 backdrop-blur-sm shadow-lg shadow-orange-500/20 hover:shadow-orange-500/40 transition-all duration-300"
-            whileHover={{ scale: 1.05 }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange-400 opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-orange-400" />
-            </span>
-            Available for opportunities
-            <motion.span
-              className="ml-1"
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <Flame className="h-3 w-3" />
-            </motion.span>
-          </motion.div>
-          
-          <motion.p
-            variants={fadeUp}
-            className="font-heading text-sm font-bold uppercase tracking-[0.45em] bg-gradient-to-r from-orange-300 via-yellow-300 to-orange-300 bg-clip-text text-transparent"
-            animate={{
-              backgroundPosition: ["0%", "100%", "0%"],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+    <section id="home" className="px-3 sm:px-4">
+      <div className="relative mx-auto h-[78svh] min-h-[520px] max-w-[1840px] overflow-hidden rounded-b-[2.5rem] bg-[#0b0a09] sm:h-[62svh] lg:h-[56svh]">
+        {/* image, or the fallback scene */}
+        {imageOk ? (
+          <img
+            src={HERO_IMAGE}
+            alt=""
+            onError={() => setImageOk(false)}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        ) : (
+          <div
+            aria-hidden
+            className="absolute inset-0"
             style={{
-              backgroundSize: "200% auto",
+              background:
+                "radial-gradient(60% 70% at 78% 8%, rgba(255,196,140,0.55), transparent 60%)," +
+                "radial-gradient(45% 55% at 92% 60%, rgba(255,214,180,0.35), transparent 65%)," +
+                "radial-gradient(70% 60% at 20% 90%, rgba(40,70,25,0.65), transparent 70%)," +
+                "linear-gradient(180deg, #3a2417 0%, #1c130d 55%, #070605 100%)",
             }}
-          >
-            {profile.name}
-          </motion.p>
-          
-          <motion.h1
-            variants={fadeUp}
-            className="mt-4 font-heading text-[clamp(2.6rem,8vw,6rem)] font-extrabold leading-[1.04] tracking-tight"
-          >
-            {words.map((word, index) => (
-              <motion.span
-                key={word}
-                className="mr-4 inline-block bg-gradient-to-r from-white via-orange-200 to-yellow-200 bg-clip-text text-transparent"
-                whileHover={{ 
-                  scale: 1.05,
-                  textShadow: "0 0 30px rgba(255, 107, 0, 0.8)",
-                }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                {word}
-              </motion.span>
-            ))}
-            <motion.span
-              className="block bg-gradient-to-r from-orange-400 via-yellow-400 to-orange-400 bg-clip-text text-transparent relative"
-              animate={{
-                backgroundPosition: ["0%", "100%", "0%"],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                ease: "linear",
-              }}
-              style={{
-                backgroundSize: "200% auto",
-              }}
+          />
+        )}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+
+        <div className="absolute inset-x-0 bottom-0 grid items-end gap-8 px-6 pb-9 sm:px-10 lg:grid-cols-[1fr_auto] lg:gap-14 lg:px-[4.5rem] lg:pb-10">
+          <div>
+            <motion.h1
+              initial={{ opacity: 0, y: 36 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease }}
+              className="font-heading text-[clamp(2.9rem,8.4vw,9.5rem)] font-medium leading-[0.9] tracking-[-0.06em] text-cream"
             >
-              Digital Experiences
-              <motion.span
-                className="absolute -right-8 top-0"
-                animate={{
-                  rotate: [0, 15, -15, 0],
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                }}
-              >
-                🔥
-              </motion.span>
-            </motion.span>
-          </motion.h1>
-          
-          <motion.p
-            variants={fadeUp}
-            className="mt-6 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg backdrop-blur-sm"
+              Wanna go to my world?
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="mt-3 text-sm italic text-white/40 sm:text-base"
+            >
+              (That glowing button down here? Yeah, that one.)
+            </motion.p>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.25, ease }}
+            className="max-w-[26rem] lg:mb-1"
           >
-            {profile.role} crafting modern, responsive, high-quality web applications —
-            pixel-perfect React interfaces backed by robust Node.js REST APIs and MongoDB.
-          </motion.p>
-          
-          <motion.div variants={fadeUp} className="mt-10 flex flex-wrap items-center gap-4">
-            <MagneticButton href="#projects" variant="primary">
-              <Sparkles className="h-4 w-4" />
-              View My Work
-            </MagneticButton>
-            <MagneticButton onClick={() => downloadResume()} variant="ghost">
-              <Download className="h-4 w-4" />
-              Download Resume
-            </MagneticButton>
+            <p className="text-[1.05rem] leading-snug text-cream/85">
+              Building responsive, production-ready web apps — React interfaces backed by
+              Node.js APIs and MongoDB, where clean code meets thoughtful design.
+            </p>
+            <div className="mt-7 flex flex-wrap items-center gap-5">
+              <a
+                href="#projects"
+                data-cursor
+                className="group inline-flex items-center gap-4 rounded-full bg-cream py-1.5 pl-6 pr-1.5 text-[1.05rem] font-medium text-black transition-transform duration-300 hover:scale-[1.03]"
+              >
+                Wanna Play?
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-black text-cream transition-transform duration-300 group-hover:translate-x-0.5">
+                  <ArrowRight className="h-[18px] w-[18px]" />
+                </span>
+              </a>
+              <button
+                type="button"
+                data-cursor
+                onClick={() => downloadResume()}
+                className="text-sm text-cream/60 underline decoration-white/20 underline-offset-4 transition-colors hover:text-cream"
+              >
+                Download resume
+              </button>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
-      
-      <motion.a
-        href="#about"
-        aria-label="Scroll to the about section"
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 text-orange-400/60 transition-colors hover:text-orange-300"
-        animate={{ y: [0, 8, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        whileHover={{ scale: 1.2 }}
-      >
-        <ArrowDown className="h-5 w-5 drop-shadow-[0_0_8px_rgba(255,107,0,0.8)]" />
-      </motion.a>
     </section>
   );
 }

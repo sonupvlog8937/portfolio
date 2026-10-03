@@ -23,6 +23,7 @@ module.exports = {
   				indigo: '#6366F1',
   				teal: '#14B8A6'
   			},
+  			cream: '#E8E7D2',
   			ink: {
   				base: '#030303',
   				surface: '#1A1A1A'
@@ -90,6 +91,7 @@ module.exports = {
   			heading: ['var(--font-heading)'],
   			body: ['var(--font-body)'],
   			display: ['var(--font-display)'],
+  			serif: ['var(--font-serif)'],
   			mono: ['var(--font-mono)']
   		},
   		keyframes: {
