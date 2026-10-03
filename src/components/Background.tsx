@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const blobs = [
   {
@@ -33,10 +34,54 @@ const blobs = [
   },
 ];
 
+// Floating fire embers
+const FireEmbers = () => {
+  const [embers, setEmbers] = useState<Array<{ id: number; x: number; delay: number; duration: number }>>([]);
+
+  useEffect(() => {
+    const emberArray = Array.from({ length: 15 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: 15 + Math.random() * 10,
+    }));
+    setEmbers(emberArray);
+  }, []);
+
+  return (
+    <>
+      {embers.map((ember) => (
+        <motion.div
+          key={ember.id}
+          className="absolute w-1 h-1 bg-orange-500 rounded-full shadow-[0_0_10px_rgba(255,107,0,0.8)]"
+          style={{
+            left: `${ember.x}%`,
+            bottom: "-10px",
+          }}
+          animate={{
+            y: [0, -1000],
+            opacity: [0, 1, 1, 0],
+            scale: [0, 1.5, 1, 0],
+          }}
+          transition={{
+            duration: ember.duration,
+            delay: ember.delay,
+            repeat: Infinity,
+            ease: "easeOut",
+          }}
+        />
+      ))}
+    </>
+  );
+};
+
 export default function Background() {
   return (
     <div aria-hidden className="fixed inset-0 -z-10 overflow-hidden bg-gradient-to-br from-gray-900 via-gray-950 to-black">
+      {/* Grid pattern */}
       <div className="absolute inset-0 bg-grid opacity-40" />
+      
+      {/* Animated gradient blobs */}
       {blobs.map((blob, i) => (
         <motion.div
           key={i}
@@ -45,8 +90,31 @@ export default function Background() {
           transition={{ duration: blob.duration, repeat: Infinity, ease: "easeInOut" }}
         />
       ))}
+      
+      {/* Fire embers rising effect */}
+      <FireEmbers />
+      
+      {/* Radial gradient overlay for depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(0,0,0,0.4)_100%)]" />
+      
+      {/* Noise texture */}
       <div className="noise absolute inset-0 opacity-[0.04]" />
+      
+      {/* Bottom gradient fade */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/30" />
+      
+      {/* Animated scan line effect */}
+      <motion.div
+        className="absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-orange-500/20 to-transparent"
+        animate={{
+          y: [0, "100vh"],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      />
     </div>
   );
 }

@@ -183,3 +183,128 @@ html.custom-cursor * {
     -webkit-backdrop-filter: blur(10px);
   }
 }
+
+/* Fire Animation Effects */
+@keyframes fire-flicker {
+  0%, 100% {
+    opacity: 1;
+    filter: brightness(1) blur(0px);
+  }
+  50% {
+    opacity: 0.8;
+    filter: brightness(1.2) blur(1px);
+  }
+}
+
+@keyframes fire-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.6),
+                0 0 40px rgba(251, 191, 36, 0.4),
+                0 0 60px rgba(249, 115, 22, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(249, 115, 22, 0.8),
+                0 0 60px rgba(251, 191, 36, 0.6),
+                0 0 90px rgba(249, 115, 22, 0.4);
+  }
+}
+
+@keyframes ember-rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0);
+    opacity: 0;
+  }
+}
+
+@keyframes glow-rotate {
+  0% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+  50% {
+    filter: hue-rotate(20deg) brightness(1.2);
+  }
+  100% {
+    filter: hue-rotate(0deg) brightness(1);
+  }
+}
+
+.fire-text {
+  text-shadow: 
+    0 0 10px rgba(249, 115, 22, 0.8),
+    0 0 20px rgba(251, 191, 36, 0.6),
+    0 0 30px rgba(249, 115, 22, 0.4);
+  animation: fire-flicker 2s infinite;
+}
+
+.fire-glow {
+  animation: fire-pulse 2s infinite;
+}
+
+.ember {
+  animation: ember-rise 3s infinite;
+}
+
+.glow-effect {
+  animation: glow-rotate 3s infinite;
+}
+
+/* Enhanced Glass Effect */
+.glass-fire {
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.15) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(251, 191, 36, 0.15) 100%
+  );
+  border: 1px solid rgba(249, 115, 22, 0.2);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px 0 rgba(249, 115, 22, 0.15);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-fire:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(249, 115, 22, 0.25) 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(251, 191, 36, 0.25) 100%
+  );
+  border-color: rgba(249, 115, 22, 0.4);
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+    0 12px 40px 0 rgba(249, 115, 22, 0.25),
+    0 0 30px rgba(251, 191, 36, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Smooth Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a, button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Fire Trail Effect for Cursor */
+.fire-trail {
+  pointer-events: none;
+  position: fixed;
+  z-index: 98;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 107, 0, 0.8) 0%,
+    rgba(255, 165, 0, 0.4) 50%,
+    transparent 100%
+  );
+  filter: blur(3px);
+  animation: fire-flicker 0.3s infinite;
+}
